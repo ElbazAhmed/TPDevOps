@@ -1,0 +1,31 @@
+image: docker:latest 
+services:
+    - docker: dind
+
+stages:
+    - build
+    - package 
+    - deploy
+
+maven-build:
+    image: 
+    maven: maven:3-openjdk-17
+    stage: build
+    script: "mvn package -B" 
+    artifacts:
+        paths:
+            - target/*.jar
+
+docker-build:
+    stage: package
+    before_script:
+        - docker login -u ahmedelbaz771 -p $DOCKER_HUB_PASSWORD
+    script:
+        - docker build -t ahmedelbaz771/product-microservice .
+        - docker push ahmedelbaz771/product-microservice
+
+docker-deploy:
+    stage: deploy
+    script:
+    - docker run -d -p 9001:9001 --name product-microservice ahmedelbaz771/product-microservice
+
