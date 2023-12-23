@@ -25,6 +25,11 @@ docker-build:
 
 docker-deploy:
     stage: deploy
+    before_script: apk add --update curl && rm -rf /var/cache/apk/*
     script:
     - docker run -d -p 9001:9001 --name product-microservice ahmedelbaz771/product-microservice
+    - sleep 30
+    - docker logs product-microservice
+    - curl -v "http://docker:9001/"
+    - docker logs product-microservice
 
