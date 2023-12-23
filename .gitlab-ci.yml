@@ -1,6 +1,6 @@
 image: docker:latest 
 services:
-    - docker: dind
+    - docker:dind
 
 stages:
     - build
@@ -8,8 +8,7 @@ stages:
     - deploy
 
 maven-build:
-    image: 
-    maven: maven:3-openjdk-17
+    image: maven:3-openjdk-17
     stage: build
     script: "mvn package -B" 
     artifacts:
